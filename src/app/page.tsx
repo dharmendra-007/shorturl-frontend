@@ -1,12 +1,9 @@
-import Link from "next/link"
-import { ArrowRight, CheckCircle, ExternalLink, LinkIcon, Zap } from "lucide-react"
+import { ArrowRight, CheckCircle, LinkIcon, Zap } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Badge } from "@/components/ui/badge"
-import { CopyButton } from "@/components/common/copy-button"
 import { UrlShortenerForm } from "@/components/common/UrlShortnerForm"
 
 export default function Home() {

@@ -5,7 +5,6 @@ import Link from "next/link"
 import { Eye, EyeOff, LinkIcon, Loader } from "lucide-react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"

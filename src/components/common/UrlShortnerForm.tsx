@@ -54,7 +54,7 @@ export function UrlShortenerForm() {
         <div className="space-y-2">
           <h2 className="text-lg md:text-xl font-bold">Shorten a URL</h2>
           <p className="text-sm text-muted-foreground">
-            Paste a long URL and we'll shorten it for you.
+            Paste a long URL and we&apos;ll shorten it for you.
           </p>
         </div>
 
@@ -68,7 +68,7 @@ export function UrlShortenerForm() {
                 <Input placeholder="https://example.com/very/long/url" {...field} />
               </FormControl>
               <FormMessage />
-              <FormDescription>We'll generate a short link for this.</FormDescription>
+              <FormDescription>We&apos;ll generate a short link for this.</FormDescription>
             </FormItem>
           )}
         />

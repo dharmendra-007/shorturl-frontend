@@ -242,7 +242,7 @@ export default function AnalyticsPage() {
           </CardHeader>
           <CardContent>
             <div className="h-64 flex items-end justify-between gap-2">
-              {analyticsData.dailyClicks.map((day, index) => (
+              {analyticsData.dailyClicks.map((day) => (
                 <div key={day.date} className="flex flex-col items-center gap-2 flex-1">
                   <div
                     className="w-full bg-primary rounded-t-sm min-h-[4px] transition-all hover:bg-primary/80"

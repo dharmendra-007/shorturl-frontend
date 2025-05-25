@@ -3,7 +3,6 @@
 import { usePathname } from 'next/navigation';
 import { Navbar } from '../common/navbar';
 import Footer from '../common/footer';
-import { useEffect, useState } from 'react';
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();

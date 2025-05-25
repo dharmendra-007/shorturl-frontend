@@ -15,7 +15,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
     if (!loading && !user) {
       router.push('/')
     }
-  }, [user, loading])
+  }, [user, loading , router])
 
   if (loading || (!loading && !user)) {
     return (

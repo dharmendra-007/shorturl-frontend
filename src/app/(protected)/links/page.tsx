@@ -27,10 +27,6 @@ export default function LinksPage() {
   const [dataLoading, setDataLoading] = useState<boolean>(true)
   const [statsLoading, setStatsLoading] = useState<boolean>(true)
 
-  const handleDeleteLink = (id: string) => {
-    API.delete(`api/v1/url/deleteurl/${id}`)
-  }
-
   useEffect(()=>{
     API.get('api/v1/url/getuserurl', {
       params : {
@@ -44,7 +40,7 @@ export default function LinksPage() {
     .finally(() => {
       setDataLoading(false)
     })
-  },[searchTerm , handleDeleteLink])
+  },[searchTerm])
 
   useEffect(()=>{
     API.get('api/v1/url/stats')
@@ -54,7 +50,12 @@ export default function LinksPage() {
     .finally(() => {
       setStatsLoading(false)
     })
-  },[handleDeleteLink])
+  },[])
+
+  const handleDeleteLink = async (id: string) => {
+    await API.delete(`api/v1/url/deleteurl/${id}`)
+    setLinks((prev) => Array.isArray(prev) ? prev.filter(link => link._id !== id): [])
+  }
 
   if(dataLoading || statsLoading) {
     return (

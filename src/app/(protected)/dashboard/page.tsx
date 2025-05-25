@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { BarChart3, ExternalLink, Eye, Link2, Loader, Plus, TrendingUp, Zap } from "lucide-react"
+import { BarChart3, ExternalLink, Eye, Link2, Loader,TrendingUp} from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -58,7 +58,7 @@ export default function DashboardPage() {
         {/* Header */}
         <div className="flex flex-col gap-2">
           <h1 className="text-3xl font-bold">Dashboard</h1>
-          <p className="text-muted-foreground">Welcome back! Here's an overview of your shortened links.</p>
+          <p className="text-muted-foreground">Welcome back! Here&apos;s an overview of your shortened links.</p>
         </div>
 
         {/* Quick URL Shortener */}
