@@ -41,7 +41,7 @@ export default function Home() {
         </section>
 
         <section id="features" className="w-full py-8 md:py-12 lg:py-24 bg-muted">
-          <div className="container px-4 md:px-6">
+          <div className="px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
                 <h2 className="text-2xl font-bold tracking-tighter md:text-3xl lg:text-4xl">Powerful Features</h2>
@@ -180,7 +180,7 @@ export default function Home() {
         </section>
 
         <section id="how-it-works" className="w-full py-8 md:py-12 lg:py-24">
-          <div className="container px-4 md:px-6">
+          <div className="px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
                 <h2 className="text-2xl font-bold tracking-tighter md:text-3xl lg:text-4xl">How It Works</h2>
@@ -222,7 +222,7 @@ export default function Home() {
         </section>
 
         <section id="faq" className="w-full py-8 md:py-12 lg:py-24">
-          <div className="container px-4 md:px-6">
+          <div className="px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
                 <h2 className="text-2xl font-bold tracking-tighter md:text-3xl lg:text-4xl">
@@ -282,7 +282,7 @@ export default function Home() {
         </section>
 
         <section className="w-full py-8 md:py-12 lg:py-24 bg-muted">
-          <div className="container px-4 md:px-6">
+          <div className="px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
                 <h2 className="text-2xl font-bold tracking-tighter md:text-3xl lg:text-4xl">Ready to get started?</h2>

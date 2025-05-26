@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { CalendarDays, ExternalLink, Eye, Loader, MoreHorizontal, Search, Trash2 } from "lucide-react"
+import { CalendarDays, ExternalLink, Eye, Loader, LockKeyhole, LockKeyholeOpen, MoreHorizontal, Search, Trash2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -19,6 +19,7 @@ import { CopyButton } from "@/components/common/copy-button"
 import API from "@/lib/axios"
 import { urlType } from "@/types/urlType"
 import { statsType } from "@/types/statsType"
+import Link from "next/link"
 
 export default function LinksPage() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -27,40 +28,49 @@ export default function LinksPage() {
   const [dataLoading, setDataLoading] = useState<boolean>(true)
   const [statsLoading, setStatsLoading] = useState<boolean>(true)
 
-  useEffect(()=>{
+  useEffect(() => {
     API.get('api/v1/url/getuserurl', {
-      params : {
-        limit : -1,
-        search : searchTerm
+      params: {
+        limit: -1,
+        search: searchTerm
       }
     })
-    .then((res) => {
-      setLinks(res.data.result)
-    })
-    .finally(() => {
-      setDataLoading(false)
-    })
-  },[searchTerm])
+      .then((res) => {
+        setLinks(res.data.result)
+      })
+      .finally(() => {
+        setDataLoading(false)
+      })
+  }, [searchTerm])
 
-  useEffect(()=>{
+  useEffect(() => {
     API.get('api/v1/url/stats')
-    .then((res) => {
-      setStats(res.data)
-    })
-    .finally(() => {
-      setStatsLoading(false)
-    })
-  },[])
+      .then((res) => {
+        setStats(res.data)
+      })
+      .finally(() => {
+        setStatsLoading(false)
+      })
+  }, [])
 
   const handleDeleteLink = async (id: string) => {
     await API.delete(`api/v1/url/deleteurl/${id}`)
-    setLinks((prev) => Array.isArray(prev) ? prev.filter(link => link._id !== id): [])
+    setLinks((prev) => Array.isArray(prev) ? prev.filter(link => link._id !== id) : [])
   }
 
-  if(dataLoading || statsLoading) {
+  const handleChangeStatus = async (id: string) => {
+    await API.patch(`api/v1/url/changestatus/${id}`)
+      .then((res) => {
+        if (res.data.success) {
+          console.log(res.data.message)
+        }
+      })
+  }
+
+  if (dataLoading || statsLoading) {
     return (
       <div className="h-screen w-full flex justify-center items-center">
-        <Loader className="h-8 w-8 text-green-500 animate-spin"/>
+        <Loader className="h-8 w-8 text-green-500 animate-spin" />
       </div>
     )
   }
@@ -161,7 +171,7 @@ export default function LinksPage() {
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Badge variant={link.isActive ? "default" : "secondary"}>{link.isActive ? "active" : "inactiive"}</Badge>
+                        <Badge variant={link.isActive ? "default" : "secondary"}>{link.isActive ? "active" : "inactive"}</Badge>
                       </TableCell>
                       <TableCell>
                         <DropdownMenu>
@@ -172,13 +182,26 @@ export default function LinksPage() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem>
-                              <ExternalLink className="mr-2 h-4 w-4" />
-                              Visit
-                            </DropdownMenuItem>
+                            <Link href={`https://short-url-backend-nine.vercel.app/` + link.shortId} target="_blank">
+                              <DropdownMenuItem>
+                                <ExternalLink className="mr-2 h-4 w-4" />
+                                Visit
+                              </DropdownMenuItem>
+                            </Link>
                             <DropdownMenuItem>
                               <Eye className="mr-2 h-4 w-4" />
                               View Analytics
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleChangeStatus(link._id)}>
+                              {
+                                link.isActive ? <LockKeyhole className="mr-2 h-4 w-4" /> : <LockKeyholeOpen className="mr-2 h-4 w-4" />
+                              }
+                              {
+                                link.isActive !== undefined &&
+                                <>
+                                  {link.isActive ? "Disable" : "Enable"}
+                                </>
+                              }
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem className="text-red-600" onClick={() => handleDeleteLink(link._id)}>
@@ -202,6 +225,6 @@ export default function LinksPage() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </div >
   )
 }
