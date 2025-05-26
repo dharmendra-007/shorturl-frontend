@@ -33,9 +33,12 @@ export function Navbar() {
   if (loading) return <NavbarSkeleton/>
 
   const handleLogout = async() => {
-    await logout().then(()=>{
+    try {
+      logout()
       router.push('/')
-    })
+    } catch (error) {
+      console.error("Logout failed : ",error)
+    }
   }
 
   const UnauthenticatedNav = () => (
