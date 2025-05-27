@@ -61,7 +61,7 @@ export default function LinksPage() {
 
   const handleChangeStatus = async (id: string) => {
     await API.patch(`api/v1/url/changestatus/${id}`)
-      .then((res) => {
+      .then(() => {
         const delta = changeStatus(id)
         updateActiveLinks(delta)
       }
