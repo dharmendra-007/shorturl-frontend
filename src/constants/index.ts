@@ -1,0 +1,1 @@
+export const BASE_URL = "https://short-url-backend-nine.vercel.app"

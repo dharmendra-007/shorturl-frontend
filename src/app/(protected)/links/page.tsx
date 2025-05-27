@@ -17,14 +17,15 @@ import {
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { CopyButton } from "@/components/common/copy-button"
 import API from "@/lib/axios"
-import { urlType } from "@/types/urlType"
-import { statsType } from "@/types/statsType"
 import Link from "next/link"
+import { useStats } from "@/store/statsStore"
+import { BASE_URL } from "@/constants"
+import { useUrls } from "@/store/urlStore"
 
 export default function LinksPage() {
   const [searchTerm, setSearchTerm] = useState("")
-  const [links, setLinks] = useState<urlType[] | null>([])
-  const [stats, setStats] = useState<statsType | null>(null)
+  const {urls , setUrls , deleteUrl , changeStatus} = useUrls()
+  const { stats, setStats, updateActiveLinks } = useStats()
   const [dataLoading, setDataLoading] = useState<boolean>(true)
   const [statsLoading, setStatsLoading] = useState<boolean>(true)
 
@@ -36,7 +37,7 @@ export default function LinksPage() {
       }
     })
       .then((res) => {
-        setLinks(res.data.result)
+        setUrls(res.data.result)
       })
       .finally(() => {
         setDataLoading(false)
@@ -55,16 +56,16 @@ export default function LinksPage() {
 
   const handleDeleteLink = async (id: string) => {
     await API.delete(`api/v1/url/deleteurl/${id}`)
-    setLinks((prev) => Array.isArray(prev) ? prev.filter(link => link._id !== id) : [])
+    deleteUrl(id)
   }
 
   const handleChangeStatus = async (id: string) => {
     await API.patch(`api/v1/url/changestatus/${id}`)
       .then((res) => {
-        if (res.data.success) {
-          console.log(res.data.message)
-        }
-      })
+        const delta = changeStatus(id)
+        updateActiveLinks(delta)
+      }
+      )
   }
 
   if (dataLoading || statsLoading) {
@@ -145,12 +146,12 @@ export default function LinksPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {links?.map((link) => (
+                  {urls?.map((link) => (
                     <TableRow key={link._id}>
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <span className="font-medium">{"short-url-backend-nine.vercel.app/" + link.shortId}</span>
-                          <CopyButton text={"https://short-url-backend-nine.vercel.app/" + link.shortId} className="h-6 w-6" />
+                          <CopyButton text={`${BASE_URL}/${link.shortId}`} className="h-6 w-6" />
                         </div>
                       </TableCell>
                       <TableCell>
@@ -182,7 +183,7 @@ export default function LinksPage() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <Link href={`https://short-url-backend-nine.vercel.app/` + link.shortId} target="_blank">
+                            <Link href={`${BASE_URL}/${link.shortId}`} target="_blank">
                               <DropdownMenuItem>
                                 <ExternalLink className="mr-2 h-4 w-4" />
                                 Visit
@@ -217,7 +218,7 @@ export default function LinksPage() {
               </Table>
             </div>
 
-            {links?.length === 0 && (
+            {urls?.length === 0 && (
               <div className="text-center py-8">
                 <p className="text-muted-foreground">No links found matching your search.</p>
               </div>

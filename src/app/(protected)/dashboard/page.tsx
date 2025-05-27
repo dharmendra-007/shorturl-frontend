@@ -10,12 +10,13 @@ import { Badge } from "@/components/ui/badge"
 import { CopyButton } from "@/components/common/copy-button"
 import API from "@/lib/axios"
 import ShortLinkCard from "@/components/dashboard/shortUrlForm"
-import { urlType } from "@/types/urlType"
-import { statsType } from "@/types/statsType"
+import { useStats } from "@/store/statsStore"
+import { BASE_URL } from "@/constants"
+import { useUrls } from "@/store/urlStore"
 
 export default function DashboardPage() {
-  const [data, setData] = useState<urlType[]>([])
-  const [stats, setStats] = useState<statsType | null>(null)
+  const {urls , setUrls} = useUrls()
+  const {stats, setStats} = useStats()
   const [dataLoading, setDataLoading] = useState<boolean>(true)
   const [statsLoading, setStatsLoading] = useState<boolean>(true)
 
@@ -26,7 +27,7 @@ export default function DashboardPage() {
       }
     })
       .then((res) => {
-        setData(res.data.result)
+        setUrls(res.data.result)
       })
       .finally(() => {
         setDataLoading(false)
@@ -147,7 +148,8 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {data.map((link) => (
+              {
+              urls.map((link) => (
                 <div key={link._id} className="flex items-center justify-between p-4 border rounded-lg border-primary">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
@@ -158,7 +160,7 @@ export default function DashboardPage() {
                     <p className="text-xs text-muted-foreground mt-1">Created {link.createdAt.split("T")[0]}</p>
                   </div>
                   <div className="flex items-center gap-1 ml-4">
-                    <CopyButton text={'https://short-url-backend-nine.vercel.app/' + link.shortId} className="h-8 w-8" />
+                    <CopyButton text={`${BASE_URL}/${link.shortId}`} className="h-8 w-8" />
                     <Button variant="ghost" size="icon" className="h-8 w-8">
                       <ExternalLink className="h-4 w-4" />
                     </Button>

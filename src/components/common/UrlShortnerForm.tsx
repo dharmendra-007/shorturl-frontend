@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/form";
 import { CopyButton } from "./copy-button";
 import API from "@/lib/axios";
+import { BASE_URL } from "@/constants";
 
 const formSchema = z.object({
   url: z.string().url({ message: "Enter a valid URL." }),
@@ -40,7 +41,7 @@ export function UrlShortenerForm() {
     })
       .then((res) => {
         if(res.data.success){
-          setShortUrl('https://short-url-backend-nine.vercel.app/' + res.data.id)
+          setShortUrl(`${BASE_URL}/${res.data.id}`)
         }
       })
   };

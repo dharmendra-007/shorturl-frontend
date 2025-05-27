@@ -1,7 +1,8 @@
+import { BASE_URL } from "@/constants";
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://short-url-backend-nine.vercel.app",
+  baseURL: BASE_URL,
   withCredentials: true,
 });
 

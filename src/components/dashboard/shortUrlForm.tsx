@@ -11,9 +11,14 @@ import { CopyButton } from '../common/copy-button';
 import Link from 'next/link';
 import { ShortUrlSchema, ShortUrlSchemaType } from '@/schema/shortUrlSchema';
 import API from '@/lib/axios';
+import { useStats } from '@/store/statsStore';
+import { BASE_URL } from '@/constants';
+import { useUrls } from '@/store/urlStore';
 
 export default function ShortLinkCard() {
   const [shortUrl, setShortUrl] = useState('');
+  const {addUrlToFront} = useUrls()
+  const {increaseTotalLinks , increaseLinkChange} = useStats()
 
   const {
     register,
@@ -29,7 +34,10 @@ export default function ShortLinkCard() {
     })
       .then((res) => {
         if(res.data.success){
-          setShortUrl('https://short-url-backend-nine.vercel.app/' + res.data.id)
+          setShortUrl(`${BASE_URL}/${res.data.id}`)
+          addUrlToFront(res.data.newUrl)
+          increaseTotalLinks()
+          increaseLinkChange()
         }
       })
   };
