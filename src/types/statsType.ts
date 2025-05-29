@@ -7,17 +7,6 @@ export interface RankedUrlType {
   clickPercent: string;
 }
 
-
-  interface ConversionRateType {
-    totalUniqueVisitors : number;
-    totalConversions : number;
-    conversionRate : number;
-    totalUniqueVisitorsChange : number
-    totalConversionsChange : number
-    conversionRateChange : number
-  }
-
-
 export type statsType = {
   success: boolean;
   message: string;
@@ -33,6 +22,4 @@ export type statsType = {
   todayClickChange: string;
   topPerformer: RankedUrlType;
   topFiveUrls: RankedUrlType[];
-  lastFiveUrls: RankedUrlType[];
-  conversionRate : ConversionRateType
 };

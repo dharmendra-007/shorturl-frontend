@@ -11,7 +11,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer"
 import { ThemeToggle } from "./theme-toggle"
 import { useAuth } from "@/hooks/useAuth"
 import { NavbarSkeleton } from "./navbar-skeleton"
@@ -19,25 +26,25 @@ import { useRouter } from "next/navigation"
 
 export function Navbar() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const { user, loading , logout} = useAuth()
+  const { user, loading, logout } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
     if (!loading && user) {
       setIsAuthenticated(true)
-    } else if(!loading  && !user){
+    } else if (!loading && !user) {
       setIsAuthenticated(false)
     }
   }, [user, loading]);
 
-  if (loading) return <NavbarSkeleton/>
+  if (loading) return <NavbarSkeleton />
 
-  const handleLogout = async() => {
+  const handleLogout = async () => {
     try {
       logout()
       router.push('/')
     } catch (error) {
-      console.error("Logout failed : ",error)
+      console.error("Logout failed : ", error)
     }
   }
 
@@ -130,72 +137,77 @@ export function Navbar() {
   const MobileNav = () => (
     <div className="flex md:hidden items-center gap-2">
       <ThemeToggle />
-      <Sheet>
-        <SheetTrigger asChild>
+      <Drawer>
+        <DrawerTrigger asChild>
           <Button variant="ghost" size="icon">
             <Menu className="h-5 w-5" />
             <span className="sr-only">Toggle menu</span>
           </Button>
-        </SheetTrigger>
-        <SheetContent side="right">
-          <SheetHeader>
-            <SheetTitle>Navigation Menu</SheetTitle>
-            <SheetDescription className="text-xs pb-4">Access all navigation links and account options from this menu.</SheetDescription>
-          </SheetHeader>
+        </DrawerTrigger>
+        <DrawerContent>
+          <div className="mx-auto w-full max-w-sm"></div>
+          <DrawerHeader>
+            <DrawerTitle className="mt-3 text-2xl text-green-500 font-bold flex justify-center items-center gap-2 w-full">
+              <LinkIcon className="h-4 w-4 text-primary" />
+              ShortUrl</DrawerTitle>
+            <DrawerDescription className="text-xs pb-4 w-[80%] mx-auto">An ultimate url shortner site you will ever need.</DrawerDescription>
+          </DrawerHeader>
           <div className="flex flex-col gap-4 mt-4">
             {isAuthenticated ? (
               <>
-                <Link href="/dashboard" className="flex items-center gap-2 text-sm font-medium">
-                  <BarChart3 className="h-4 w-4" />
-                  Dashboard
-                </Link>
-                <Link href="/links" className="flex items-center gap-2 text-sm font-medium">
-                  <FolderOpen className="h-4 w-4" />
-                  My Links
-                </Link>
-                <Link href="/analytics" className="flex items-center gap-2 text-sm font-medium">
-                  <BarChart3 className="h-4 w-4" />
-                  Analytics
-                </Link>
-                <Link href="/profile" className="flex items-center gap-2 text-sm font-medium">
-                  <User className="h-4 w-4" />
-                  Profile
-                </Link>
-                <Button variant="ghost" onClick={handleLogout} className="justify-start gap-2 text-red-600">
-                  <LogOut className="h-4 w-4" />
-                  Logout
-                </Button>
+                <div className="flex flex-col items-center gap-2">
+                  <Link href="/dashboard" className="flex items-center gap-2 text-sm font-medium bg-accent py-3 px-4 rounded-lg w-[80%] justify-center">
+                    <BarChart3 className="h-4 w-4" />
+                    Dashboard
+                  </Link>
+                  <Link href="/links" className="flex items-center gap-2 text-sm font-medium bg-accent py-3 px-4 rounded-lg w-[80%] justify-center">
+                    <FolderOpen className="h-4 w-4" />
+                    My Links
+                  </Link>
+                  <Link href="/analytics" className="flex items-center gap-2 text-sm font-medium bg-accent py-3 px-4 rounded-lg w-[80%] justify-center">
+                    <BarChart3 className="h-4 w-4" />
+                    Analytics
+                  </Link>
+                  {/* <Link href="/profile" className="flex items-center gap-2 text-sm font-medium bg-accent py-3 px-4 rounded-lg w-[80%] justify-center">
+                    <User className="h-4 w-4" />
+                    Profile
+                  </Link> */}
+                  <Button variant="ghost" onClick={handleLogout} className="justify-start gap-2 text-red-600 mb-4">
+                    <LogOut className="h-6 w-6" />
+                    Logout
+                  </Button>
+                </div>
               </>
             ) : (
               <>
                 <div className="flex flex-col items-center gap-4">
-                  <Link href="#features" className="text-sm font-medium">
+                  <Link href="#features" className="flex items-center gap-2 text-sm font-medium bg-accent py-3 px-4 rounded-lg w-[80%] justify-center">
                     Features
                   </Link>
-                  <Link href="#how-it-works" className="text-sm font-medium">
+                  <Link href="#how-it-works" className="flex items-center gap-2 text-sm font-medium bg-accent py-3 px-4 rounded-lg w-[80%] justify-center">
                     How It Works
                   </Link>
-                  <Link href="#faq" className="text-sm font-medium">
+                  <Link href="#faq" className="flex items-center gap-2 text-sm font-medium bg-accent py-3 px-4 rounded-lg w-[80%] justify-center">
                     FAQ
                   </Link>
                 </div>
-                <div className="border-t pt-4 mt-4">
-                  <div className="flex flex-col gap-2">
-                    <Link href="/login" className="w-full">
-                      <Button variant="ghost" className="justify-center w-full">
+                <div className="border-t pt-4 mb-4">
+                  <div className="flex flex-col gap-3">
+                    <Link href="/login" className="flex justify-center">
+                      <Button variant="ghost" className="gap-2 text-sm font-medium bg-accent py-3 px-4 rounded-lg w-[80%]">
                         Login
                       </Button>
                     </Link>
-                    <Link href="/signup" className="w-full">
-                      <Button className="justify-center w-full">Sign Up Free</Button>
+                    <Link href="/signup" className="flex justify-center">
+                      <Button className="gap-2 text-sm font-medium py-3 px-4 rounded-lg w-[80%]">Sign Up Free</Button>
                     </Link>
                   </div>
                 </div>
               </>
             )}
           </div>
-        </SheetContent>
-      </Sheet>
+        </DrawerContent>
+      </Drawer>
     </div>
   )
 

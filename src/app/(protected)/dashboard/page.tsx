@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { BarChart3, ExternalLink, Eye, Link2, Loader,TrendingUp} from "lucide-react"
+import { BarChart3, ExternalLink, Eye, Link2,TrendingUp} from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -13,6 +13,7 @@ import ShortLinkCard from "@/components/dashboard/shortUrlForm"
 import { useStats } from "@/store/statsStore"
 import { BASE_URL } from "@/constants"
 import { useUrls } from "@/store/urlStore"
+import { DashboardSkeleton } from "@/components/dashboard/dashboardSkeleton"
 
 export default function DashboardPage() {
   const {urls , setUrls} = useUrls()
@@ -47,9 +48,7 @@ export default function DashboardPage() {
 
   if (dataLoading || statsLoading) {
     return (
-      <div className="h-screen w-full flex justify-center items-center">
-        <Loader className="h-8 w-8 text-green-500 animate-spin" />
-      </div>
+      <DashboardSkeleton/>
     )
   }
 
@@ -123,7 +122,7 @@ export default function DashboardPage() {
             <CardContent className="flex flex-col gap-4">
               <div className="text-sm font-bold truncate">
                 { stats?.topPerformer !== undefined &&
-                  "short-url-backend-nine.vercel.app/" + stats?.topPerformer?.shortId
+                  `${BASE_URL.split("://")[1]}/${stats?.topPerformer?.shortId}`
                 }
               </div>
               <p className="text-xs text-muted-foreground">
@@ -152,8 +151,8 @@ export default function DashboardPage() {
               urls.map((link) => (
                 <div key={link._id} className="flex items-center justify-between p-4 border rounded-lg border-primary">
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="font-medium text-sm">{'short-url-backend-nine.vercel.app/' + link.shortId}</span>
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
+                      <span className="font-medium text-sm">{`${BASE_URL}/${link.shortId}`}</span>
                       <Badge variant="secondary">{link.visitHistory.length} clicks</Badge>
                     </div>
                     <p className="text-sm text-muted-foreground truncate">{link.redirectUrl}</p>
@@ -161,7 +160,11 @@ export default function DashboardPage() {
                   </div>
                   <div className="flex items-center gap-1 ml-4">
                     <CopyButton text={`${BASE_URL}/${link.shortId}`} className="h-8 w-8" />
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-8 w-8"
+                    onClick={() => window.open(`${BASE_URL}/${link.shortId}` , "_blank")}>
                       <ExternalLink className="h-4 w-4" />
                     </Button>
                   </div>

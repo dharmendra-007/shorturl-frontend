@@ -1,1 +1,1 @@
-export const BASE_URL = "https://short-url-backend-nine.vercel.app"
+export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000"

@@ -3,6 +3,11 @@ export type urlType = {
   shortId: string;
   redirectUrl: string;
   isActive : boolean;
-  visitHistory: { timestamp: string }[];
+  visitHistory: { 
+    timestamp: string ,
+    ip: string,
+    deviceType: string,
+    source: string
+  }[];
   createdAt: string;
 }

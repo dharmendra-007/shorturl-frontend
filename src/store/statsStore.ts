@@ -7,6 +7,7 @@ type StatsStore = {
   increaseTotalLinks: () => void;
   increaseLinkChange: () => void;
   updateActiveLinks: (delta : number) => void;
+  increaseTotalClicks : () => void
 };
 
 export const useStats = create<StatsStore>((set) => ({
@@ -32,5 +33,11 @@ export const useStats = create<StatsStore>((set) => ({
       activeLinks : state.stats.activeLinks + delta
     }
   } : state
-  )
+  ),
+  increaseTotalClicks : () => set((state) => state.stats ? {
+    stats : {
+      ...state.stats,
+      totalClicks : state.stats.totalClicks + 1
+    }
+  } : state)
 }))
