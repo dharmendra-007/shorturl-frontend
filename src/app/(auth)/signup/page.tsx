@@ -19,7 +19,7 @@ export default function SignupPage() {
   const [mounted, setMounted] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
 
-  const {signup} = useAuth()
+  const {signup  , signupLoading} = useAuth()
 
   useEffect(() => {
     setMounted(true)
@@ -34,8 +34,8 @@ export default function SignupPage() {
     },
   })
 
-  const onSubmit = async (data: SignupSchemaType) => {
-    await signup(data.name , data.email , data.password)
+  const onSubmit = (data: SignupSchemaType) => {
+    signup(data.name , data.email , data.password)
   }
 
   if(!mounted){
@@ -163,8 +163,8 @@ export default function SignupPage() {
                     </FormItem>
                   )}
                 /> */}
-                <Button type="submit" className="w-full h-11 cursor-pointer" disabled={form.formState.isSubmitting}>
-                  {form.formState.isSubmitting ? <Loader className="animate-spin"/> : "Create account"}
+                <Button type="submit" className="w-full h-11 cursor-pointer" disabled={form.formState.isSubmitting || signupLoading}>
+                  {(form.formState.isSubmitting || signupLoading) ? <Loader className="animate-spin"/> : "Create account"}
                 </Button>
               </form>
             </Form>

@@ -13,9 +13,11 @@ interface User {
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (email: string, password: string, rememberMe?: boolean) => Promise<void>;
+  loginLoading: boolean;
+  signupLoading: boolean;
+  login: (email: string, password: string, rememberMe?: boolean) => void;
   logout: () => Promise<void>;
-  signup: (name: string, email: string, password: string) => Promise<void>;
+  signup: (name: string, email: string, password: string) => void;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,6 +25,8 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [signupLoading, setSignUpLoading] = useState(false);
   const router = useRouter();
 
   // Fetch user on load
@@ -38,7 +42,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const login = async (email: string, password: string, rememberMe = false) => {
-    setLoading(true);
+    setLoginLoading(true)
     API.post("/api/v1/user/login", { email, password, rememberMe })
       .then((res) => {
         if (res.data.success) {
@@ -54,11 +58,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           toast.error(String(error))
         }
       })
-      .finally(() => setLoading(false))
+      .finally(() => setLoginLoading(false))
   };
 
   const signup = async (name: string, email: string, password: string) => {
-    setLoading(true);
+    setSignUpLoading(true);
     API.post("/api/v1/user/", { name, email, password })
       .then((res) => {
         if (res.data.success) {
@@ -73,7 +77,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           toast.error("Network error!")
         }
       })
-      .finally(() => setLoading(false))
+      .finally(() => setSignUpLoading(false))
   };
 
   const logout = async () => {
@@ -91,11 +95,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           toast.error("Network error!")
         }
       })
-      .finally(() => setLoading(false))
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, signup }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, signup  , loginLoading , signupLoading}}>
       {children}
     </AuthContext.Provider>
   );

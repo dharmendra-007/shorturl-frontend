@@ -19,7 +19,7 @@ export default function LoginPage() {
   const [mounted, setMounted] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
 
-  const { login , loading } = useAuth()
+  const { login , loginLoading } = useAuth()
 
   useEffect(() => {
     setMounted(true)
@@ -143,8 +143,8 @@ export default function LoginPage() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full cursor-pointer" disabled={form.formState.isSubmitting}>
-                  {form.formState.isSubmitting || loading ? <Loader className="animate-spin" /> : "Login"}
+                <Button type="submit" className="w-full cursor-pointer" disabled={form.formState.isSubmitting || loginLoading}>
+                  {(form.formState.isSubmitting || loginLoading) ? <Loader className="animate-spin" /> : "Login"}
                 </Button>
               </form>
             </Form>
