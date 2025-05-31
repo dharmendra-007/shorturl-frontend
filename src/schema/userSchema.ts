@@ -31,10 +31,7 @@ export const signupSchema = z.object({
     })
     .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, {
       message: "Password must contain at least one uppercase letter, one lowercase letter, and one number.",
-    }),
-  agreeTerms: z.boolean().refine((value) => value === true, {
-    message: "You must agree to the terms and conditions.",
-  }),
+    })
 })
 
 export type SignupSchemaType = z.infer<typeof signupSchema>

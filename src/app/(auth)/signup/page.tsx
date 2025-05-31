@@ -31,7 +31,6 @@ export default function SignupPage() {
       name: "",
       email: "",
       password: "",
-      agreeTerms: false,
     },
   })
 
