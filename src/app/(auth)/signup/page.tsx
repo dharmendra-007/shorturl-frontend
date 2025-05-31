@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Checkbox } from "@/components/ui/checkbox"
+// import { Checkbox } from "@/components/ui/checkbox"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { ThemeToggle } from "@/components/common/theme-toggle"
@@ -45,17 +45,17 @@ export default function SignupPage() {
 
   return (
     <div className="container flex min-h-screen w-full flex-col items-center justify-center px-4">
-      <Link href="/" className="absolute left-4 top-4 md:left-8 md:top-8 flex items-center gap-2 text-lg font-bold">
-        <LinkIcon className="h-6 w-6" />
-        <span>ShortUrl</span>
+      <Link href="/" className="absolute left-4 top-4 md:left-8 md:top-8 flex items-center justify-center gap-2 text-lg font-bold h-9">
+        <LinkIcon className="!h-[1.2rem] !w-[1.2rem] !sm:h-6 !sm:w-6 !md:h-8 !md:w-8" />
+        <span className="text-lg sm:text-xl lg:text-2xl">ShortUrl</span>
       </Link>
 
       <div className="absolute right-4 top-4 md:right-8 md:top-8">
-        <ThemeToggle />
+        <ThemeToggle/>
       </div>
 
-      <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-        <Card>
+      <div className="flex w-full flex-col justify-center space-y-6 sm:w-4/5 md:w-3/4 lg:w-1/3 h-full">
+        <Card className="sm:min-h-1/2">
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl text-center">Create an account</CardTitle>
             <CardDescription className="text-center">Enter your information to create an account</CardDescription>
@@ -77,6 +77,7 @@ export default function SignupPage() {
                           autoComplete="name"
                           autoCorrect="off"
                           disabled={form.formState.isSubmitting}
+                          className="h-11"
                           {...field}
                         />
                       </FormControl>
@@ -98,6 +99,7 @@ export default function SignupPage() {
                           autoComplete="email"
                           autoCorrect="off"
                           disabled={form.formState.isSubmitting}
+                          className="h-11"
                           {...field}
                         />
                       </FormControl>
@@ -119,6 +121,7 @@ export default function SignupPage() {
                             autoComplete="new-password"
                             autoCorrect="off"
                             disabled={form.formState.isSubmitting}
+                            className="h-11"
                             {...field}
                           />
                           <Button
@@ -137,11 +140,11 @@ export default function SignupPage() {
                     </FormItem>
                   )}
                 />
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="agreeTerms"
                   render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                    <FormItem className="flex flex-row items-center space-x-3 space-y-0">
                       <FormControl>
                         <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                       </FormControl>
@@ -160,8 +163,8 @@ export default function SignupPage() {
                       </div>
                     </FormItem>
                   )}
-                />
-                <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+                /> */}
+                <Button type="submit" className="w-full h-11" disabled={form.formState.isSubmitting}>
                   {form.formState.isSubmitting ? <Loader className="animate-spin"/> : "Create account"}
                 </Button>
               </form>

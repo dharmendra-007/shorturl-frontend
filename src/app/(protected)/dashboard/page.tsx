@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { BarChart3, ExternalLink, Eye, Link2,TrendingUp} from "lucide-react"
+import { BarChart3, ExternalLink, Eye, Link2, TrendingUp } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -16,8 +16,8 @@ import { useUrls } from "@/store/urlStore"
 import { DashboardSkeleton } from "@/components/dashboard/dashboardSkeleton"
 
 export default function DashboardPage() {
-  const {urls , setUrls} = useUrls()
-  const {stats, setStats} = useStats()
+  const { urls, setUrls } = useUrls()
+  const { stats, setStats , increaseTotalClicks , increaseTodayClicks } = useStats()
   const [dataLoading, setDataLoading] = useState<boolean>(true)
   const [statsLoading, setStatsLoading] = useState<boolean>(true)
 
@@ -48,12 +48,12 @@ export default function DashboardPage() {
 
   if (dataLoading || statsLoading) {
     return (
-      <DashboardSkeleton/>
+      <DashboardSkeleton />
     )
   }
 
   return (
-    <div className="container mx-auto py-6 px-4">
+    <div className="w-full mx-auto py-6">
       <div className="flex flex-col gap-6">
         {/* Header */}
         <div className="flex flex-col gap-2">
@@ -66,7 +66,7 @@ export default function DashboardPage() {
 
         {/* Stats Cards */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card className="border-primary">
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Links</CardTitle>
               <Link2 className="h-4 w-4 text-muted-foreground" />
@@ -82,7 +82,7 @@ export default function DashboardPage() {
               </p>
             </CardContent>
           </Card>
-          <Card className="border-primary">
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Clicks</CardTitle>
               <Eye className="h-4 w-4 text-muted-foreground" />
@@ -98,7 +98,7 @@ export default function DashboardPage() {
               </p>
             </CardContent>
           </Card>
-          <Card className="border-primary">
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Clicks Today</CardTitle>
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
@@ -114,28 +114,28 @@ export default function DashboardPage() {
               </p>
             </CardContent>
           </Card>
-          <Card className="border-primary">
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Top Performer</CardTitle>
               <BarChart3 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
               <div className="text-sm font-bold truncate">
-                { stats?.topPerformer !== undefined &&
+                {stats?.topPerformer !== undefined &&
                   `${BASE_URL.split("://")[1]}/${stats?.topPerformer?.shortId}`
                 }
               </div>
               <p className="text-xs text-muted-foreground">
                 {stats?.topPerformer !== undefined &&
-                stats?.topPerformer?.clicks + " clicks"
+                  stats?.topPerformer?.clicks + " clicks"
                 }
-                </p>
+              </p>
             </CardContent>
           </Card>
         </div>
 
         {/* Recent Links */}
-        <Card className="border-primary">
+        <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
               <CardTitle>Recent Links</CardTitle>
@@ -148,28 +148,32 @@ export default function DashboardPage() {
           <CardContent>
             <div className="space-y-4">
               {
-              urls.map((link) => (
-                <div key={link._id} className="flex items-center justify-between p-4 border rounded-lg border-primary">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <span className="font-medium text-sm">{`${BASE_URL}/${link.shortId}`}</span>
-                      <Badge variant="secondary">{link.visitHistory.length} clicks</Badge>
+                urls.map((link) => (
+                  <div key={link._id} className="flex items-center justify-between p-4 border rounded-lg">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1 flex-wrap">
+                        <span className="font-medium text-sm">{`${BASE_URL}/${link.shortId}`}</span>
+                        <Badge variant="secondary">{link.visitHistory.length} clicks</Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground truncate">{link.redirectUrl}</p>
+                      <p className="text-xs text-muted-foreground mt-1">Created {link.createdAt.split("T")[0]}</p>
                     </div>
-                    <p className="text-sm text-muted-foreground truncate">{link.redirectUrl}</p>
-                    <p className="text-xs text-muted-foreground mt-1">Created {link.createdAt.split("T")[0]}</p>
+                    <div className="flex items-center gap-1 ml-4">
+                      <CopyButton text={`${BASE_URL}/${link.shortId}`} className="h-8 w-8" />
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8"
+                        onClick={() => {
+                          increaseTotalClicks()
+                          increaseTodayClicks()
+                          window.open(`${BASE_URL}/${link.shortId}`, "_blank") 
+                          }}>
+                        <ExternalLink className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1 ml-4">
-                    <CopyButton text={`${BASE_URL}/${link.shortId}`} className="h-8 w-8" />
-                    <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    className="h-8 w-8"
-                    onClick={() => window.open(`${BASE_URL}/${link.shortId}` , "_blank")}>
-                      <ExternalLink className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              ))}
+                ))}
             </div>
           </CardContent>
         </Card>

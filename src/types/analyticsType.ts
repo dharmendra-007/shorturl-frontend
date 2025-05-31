@@ -37,24 +37,30 @@ export interface UrlType {
   clickPercent: string
 }
 
+export interface HourlyClicksDataType {
+  hour: string,
+  clicks: number
+}
+
 export type AnalyticsType = {
-    totalClicks: number,
-    clicksCurrentPeriod: number,
-    clickChangePercentage: number,
-    uniqueVisitors: number,
-    currentUniqueVisitors: number,
-    changeUniqueVisitors: number,
-    todaysClicks: number,
-    clicksChangeFromYesterday: number,
-    conversionRate: string,
-    currentConversionRate: string,
-    changeConversionRate: number,
-    topFiveUrlsWithPercentage: UrlType[],
-    DeviceInfoWithPercentage: {
-      data: DeviceInfoDataType[]
-    }[],
-    SourceInfoWithPercentage: {
-        data: SourceInfoDataType[]
-      }[],
-    dailyClicksData: DailyClickDataType[]
+  totalClicks: number,
+  clicksCurrentPeriod: number,
+  clickChangePercentage: number,
+  uniqueVisitors: number,
+  currentUniqueVisitors: number,
+  changeUniqueVisitors: number,
+  todaysClicks: number,
+  clicksChangeFromYesterday: number,
+  conversionRate: string,
+  currentConversionRate: string,
+  changeConversionRate: number,
+  topFiveUrlsWithPercentage: UrlType[],
+  DeviceInfoWithPercentage: {
+    data: DeviceInfoDataType[]
+  }[],
+  SourceInfoWithPercentage: {
+    data: SourceInfoDataType[]
+  }[],
+  dailyClicksData: DailyClickDataType[],
+  hourlyClicksData: HourlyClicksDataType[]
 }

@@ -22,12 +22,14 @@ import {
 import { ThemeToggle } from "./theme-toggle"
 import { useAuth } from "@/hooks/useAuth"
 import { NavbarSkeleton } from "./navbar-skeleton"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
+import { cn } from "@/lib/utils"
 
 export function Navbar() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const { user, loading, logout } = useAuth()
   const router = useRouter()
+  const pathname = usePathname()
 
   useEffect(() => {
     if (!loading && user) {
@@ -78,13 +80,13 @@ export function Navbar() {
   const AuthenticatedNav = () => (
     <>
       <nav className="hidden md:flex gap-6">
-        <Link href="/dashboard" className="text-sm font-medium hover:underline underline-offset-4">
+        <Link href="/dashboard" className={cn("text-sm font-medium hover:underline underline-offset-4 transition-transform" , pathname == "/dashboard" && "text-primary underline -translate-y-0.5")}>
           Dashboard
         </Link>
-        <Link href="/links" className="text-sm font-medium hover:underline underline-offset-4">
+        <Link href="/links" className={cn("text-sm font-medium hover:underline underline-offset-4" , pathname == "/links" && "text-primary underline -translate-y-0.5")}>
           My Links
         </Link>
-        <Link href="/analytics" className="text-sm font-medium hover:underline underline-offset-4">
+        <Link href="/analytics" className={cn("text-sm font-medium hover:underline underline-offset-4 relative" , pathname == "/analytics" && "text-primary underline -translate-y-0.5")}>
           Analytics
         </Link>
       </nav>
@@ -124,7 +126,7 @@ export function Navbar() {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator /> */}
-            <DropdownMenuItem onClick={handleLogout} className="flex items-center gap-2 text-red-600">
+            <DropdownMenuItem className="flex items-center gap-2 text-red-600" onClick={handleLogout}>
               <LogOut className="h-4 w-4" />
               Logout
             </DropdownMenuItem>
@@ -140,7 +142,7 @@ export function Navbar() {
       <Drawer>
         <DrawerTrigger asChild>
           <Button variant="ghost" size="icon">
-            <Menu className="h-5 w-5" />
+            <Menu className="!h-8 !w-8" />
             <span className="sr-only">Toggle menu</span>
           </Button>
         </DrawerTrigger>

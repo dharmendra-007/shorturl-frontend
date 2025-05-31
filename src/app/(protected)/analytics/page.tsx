@@ -57,7 +57,7 @@ export default function AnalyticsPage() {
               <SelectValue placeholder="Select time range" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1">Last 24 hours</SelectItem>
+              <SelectItem value="1">Today</SelectItem>
               <SelectItem value="7">Last 7 days</SelectItem>
               <SelectItem value="30">Last 30 days</SelectItem>
               <SelectItem value="90">Last 90 days</SelectItem>
@@ -222,7 +222,7 @@ export default function AnalyticsPage() {
             >
               <BarChart
                 accessibilityLayer
-                data={data?.dailyClicksData}
+                data={parseInt(period) == 1 ? data?.hourlyClicksData : data?.dailyClicksData}
                 margin={{
                   left: 12,
                   right: 12,
@@ -230,7 +230,7 @@ export default function AnalyticsPage() {
               >
                 <CartesianGrid vertical={false} />
                 <XAxis
-                  dataKey="date"
+                  dataKey={parseInt(period) == 1 ? "hour" : "date"}
                   tickLine={false}
                   axisLine={false}
                   tickMargin={8}
