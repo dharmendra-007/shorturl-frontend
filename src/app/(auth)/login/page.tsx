@@ -143,7 +143,7 @@ export default function LoginPage() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+                <Button type="submit" className="w-full cursor-pointer" disabled={form.formState.isSubmitting}>
                   {form.formState.isSubmitting ? <Loader className="animate-spin" /> : "Login"}
                 </Button>
               </form>

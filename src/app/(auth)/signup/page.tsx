@@ -164,7 +164,7 @@ export default function SignupPage() {
                     </FormItem>
                   )}
                 /> */}
-                <Button type="submit" className="w-full h-11" disabled={form.formState.isSubmitting}>
+                <Button type="submit" className="w-full h-11 cursor-pointer" disabled={form.formState.isSubmitting}>
                   {form.formState.isSubmitting ? <Loader className="animate-spin"/> : "Create account"}
                 </Button>
               </form>
