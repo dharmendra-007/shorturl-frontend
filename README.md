@@ -1,4 +1,4 @@
-# 🔗 ShortUrl
+# 🔗 **ShortUrl**
 <img src="public/images/site.png" alt="site preview" width="100%">
 
 ShortURL – A full-stack URL shortener built with Next.js, TypeScript, Express.js and mongoDB featuring user authentication, real-time analytics, and a clean, responsive UI using Tailwind CSS and shadcn/ui. Includes secure link management and visual insights with charts for enhanced user experience.
@@ -64,14 +64,12 @@ shorturl-frontend/
 git clone https://github.com/dharmendra-007/shorturl-frontend.git
 cd shorturl-frontend
 ```
----
 
 2. **Install Dependencies**
 
 ```bash
 npm install
 ```
----
 
 3. **Environment Setup**
 
@@ -82,8 +80,6 @@ NEXT_PUBLIC_BASE_URL = http://localhost:8000
 ```
 
 👉**For BASE URL reference**, check the [Backend Repo](https://github.com/dharmendra-007/short-url-backend)
-
---- 
 
 4. **Start the Server**
 
@@ -101,7 +97,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 similar steps for pnpm, yarn and bun.
 
----
 
 ## 🤝 Contributing
 
@@ -119,7 +114,6 @@ similar steps for pnpm, yarn and bun.
    `git push origin feature/YourFeatureName`
 8. **Create a Pull Request** from your branch to `main`
 
----
 
 ## 📄 License
 
