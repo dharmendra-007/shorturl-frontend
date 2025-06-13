@@ -97,6 +97,7 @@ export function UrlShortenerForm() {
               <div className="flex gap-1 flex-shrink-0">
                 <CopyButton text={shortUrl} className="h-8 w-8" />
                 <Button
+                  type="button"
                   variant="ghost"
                   size="icon"
                   className="h-8 w-8"

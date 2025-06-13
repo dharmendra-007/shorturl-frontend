@@ -23,7 +23,7 @@ export function CopyButton({ text, className }: CopyButtonProps) {
   }
 
   return (
-    <Button variant="ghost" size="icon" className={className} onClick={handleCopy}>
+    <Button type="button" variant="ghost" size="icon" className={className} onClick={handleCopy}>
       {isCopied ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4" />}
       <span className="sr-only">{isCopied ? "Copied" : "Copy"}</span>
     </Button>
