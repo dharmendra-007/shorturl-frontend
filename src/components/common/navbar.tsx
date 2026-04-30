@@ -1,6 +1,5 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import Link from "next/link"
 import { LinkIcon, Menu, User, LogOut, BarChart3, FolderOpen } from "lucide-react"
 
@@ -21,30 +20,16 @@ import {
 } from "@/components/ui/drawer"
 import { ThemeToggle } from "./theme-toggle"
 import { useAuth } from "@/hooks/useAuth"
-import { NavbarSkeleton } from "./navbar-skeleton"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 
 export function Navbar() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const { user, loading, logout } = useAuth()
-  const router = useRouter()
+  const { isAuthenticated, logout } = useAuth()
   const pathname = usePathname()
-
-  useEffect(() => {
-    if (!loading && user) {
-      setIsAuthenticated(true)
-    } else if (!loading && !user) {
-      setIsAuthenticated(false)
-    }
-  }, [user, loading]);
-
-  if (loading) return <NavbarSkeleton />
 
   const handleLogout = async () => {
     try {
-      logout()
-      router.push('/')
+      await logout()
     } catch (error) {
       console.error("Logout failed : ", error)
     }

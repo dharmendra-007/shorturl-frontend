@@ -12,6 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { ThemeToggle } from "@/components/common/theme-toggle"
+import { GoogleAuthButton } from "@/components/common/google-auth-button"
 import { useAuth } from "@/hooks/useAuth"
 import { loginSchema, LoginSchemaType } from "@/schema/userSchema"
 
@@ -93,12 +94,12 @@ export default function LoginPage() {
                     <FormItem>
                       <div className="flex items-center justify-between">
                         <FormLabel>Password</FormLabel>
-                        {/* <Link
+                        <Link
                           href="/forgot-password"
                           className="text-sm font-medium text-primary underline-offset-4 hover:underline"
                         >
                           Forgot password?
-                        </Link> */}
+                        </Link>
                       </div>
                       <FormControl>
                         <div className="relative">
@@ -146,6 +147,7 @@ export default function LoginPage() {
                 <Button type="submit" className="w-full cursor-pointer" disabled={form.formState.isSubmitting || loginLoading}>
                   {(form.formState.isSubmitting || loginLoading) ? <Loader className="animate-spin" /> : "Login"}
                 </Button>
+                <GoogleAuthButton />
               </form>
             </Form>
           </CardContent>

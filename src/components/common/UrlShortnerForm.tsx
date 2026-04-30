@@ -21,6 +21,7 @@ import { CopyButton } from "./copy-button";
 import API from "@/lib/axios";
 import { BASE_URL } from "@/constants";
 import { toast } from "sonner";
+import { QrCodePreview } from "./qr-code-preview";
 
 const formSchema = z.object({
   url: z.string().url({ message: "Enter a valid URL." }),
@@ -90,25 +91,28 @@ export function UrlShortenerForm() {
         </Button>
 
         {shortUrl && (
-          <div className="rounded-lg border bg-muted p-2">
-            <div className="flex items-center justify-between gap-2">
-              <p className="text-sm font-medium truncate">{shortUrl.split
-                ("://")[1]}</p>
-              <div className="flex gap-1 flex-shrink-0">
-                <CopyButton text={shortUrl} className="h-8 w-8" />
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8"
-                  onClick={() => window.open(shortUrl, "_blank")}
-                >
-                  <ExternalLink className="h-4 w-4" />
-                  <span className="sr-only">Open</span>
-                </Button>
+          <>
+            <div className="rounded-lg border bg-muted p-2">
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-sm font-medium truncate">{shortUrl.split
+                  ("://")[1]}</p>
+                <div className="flex gap-1 flex-shrink-0">
+                  <CopyButton text={shortUrl} className="h-8 w-8" />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={() => window.open(shortUrl, "_blank")}
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                    <span className="sr-only">Open</span>
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
+            <QrCodePreview shortUrl={shortUrl} />
+          </>
         )}
       </form>
     </Form>

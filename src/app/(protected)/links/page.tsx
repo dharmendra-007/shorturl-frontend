@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { CalendarDays, ExternalLink, Eye, LockKeyhole, LockKeyholeOpen, MoreHorizontal, Search, Trash2 } from "lucide-react"
+import { CalendarDays, ExternalLink, Eye, LockKeyhole, LockKeyholeOpen, MoreHorizontal, QrCode, Search, Trash2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -22,6 +22,8 @@ import { BASE_URL } from "@/constants"
 import { useUrls } from "@/store/urlStore"
 import { LinksSkeleton } from "@/components/links/linksSkeleton"
 import { toast } from "sonner"
+import { QrCodeDialog } from "@/components/common/qr-code-dialog"
+import { urlType } from "@/types/urlType"
 
 export default function LinksPage() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -29,6 +31,8 @@ export default function LinksPage() {
   const { stats, setStats, updateActiveLinks, increaseTotalClicks } = useStats()
   const [dataLoading, setDataLoading] = useState<boolean>(true)
   const [statsLoading, setStatsLoading] = useState<boolean>(true)
+  const [selectedQrLink, setSelectedQrLink] = useState<urlType | null>(null)
+  const [qrDialogOpen, setQrDialogOpen] = useState(false)
 
   useEffect(() => {
     API.get('api/v1/url/getuserurl', {
@@ -85,6 +89,11 @@ export default function LinksPage() {
           toast.error("Network error")
         }
       })
+  }
+
+  const handleOpenQrCode = (link: urlType) => {
+    setSelectedQrLink(link)
+    setQrDialogOpen(true)
   }
 
   if (dataLoading || statsLoading) {
@@ -159,7 +168,7 @@ export default function LinksPage() {
                     <TableHead>Clicks</TableHead>
                     <TableHead>Created</TableHead>
                     <TableHead>Status</TableHead>
-                    <TableHead className="w-[50px]"></TableHead>
+                    <TableHead className="w-[110px] text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -192,56 +201,67 @@ export default function LinksPage() {
                         <Badge variant={link.isActive ? "default" : "secondary"}>{link.isActive ? "active" : "inactive"}</Badge>
                       </TableCell>
                       <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="h-8 w-8">
-                              <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Open menu</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                              className="cursor-pointer"
-                              onClick={
-                                () => {
-                                  increaseClicks(link._id)
-                                  increaseTotalClicks()
-                                  window.open(`${BASE_URL}/${link.shortId}`, "_blank")
+                        <div className="flex items-center justify-end gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8"
+                            onClick={() => handleOpenQrCode(link)}
+                          >
+                            <QrCode className="h-4 w-4" />
+                            <span className="sr-only">Open QR code</span>
+                          </Button>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="icon" className="h-8 w-8">
+                                <MoreHorizontal className="h-4 w-4" />
+                                <span className="sr-only">Open menu</span>
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem
+                                className="cursor-pointer"
+                                onClick={
+                                  () => {
+                                    increaseClicks(link._id)
+                                    increaseTotalClicks()
+                                    window.open(`${BASE_URL}/${link.shortId}`, "_blank")
+                                  }
                                 }
-                              }
-                            >
-                              <ExternalLink className="mr-2 h-4 w-4" />
-                              Visit
-                            </DropdownMenuItem>
-                            {/* <DropdownMenuItem
-                                className="cursor-not-allowed"
                               >
-                                <Eye className="mr-2 h-4 w-4" />
-                                View Analytics
-                              </DropdownMenuItem> */}
-                            <DropdownMenuItem
-                              className="cursor-pointer"
-                              onClick={() => handleChangeStatus(link._id)}
-                            >
-                              {
-                                link.isActive ? <LockKeyhole className="mr-2 h-4 w-4" /> : <LockKeyholeOpen className="mr-2 h-4 w-4" />
-                              }
-                              {
-                                link.isActive !== undefined &&
-                                <>
-                                  {link.isActive ? "Disable" : "Enable"}
-                                </>
-                              }
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-red-600 cursor-pointer"
-                              onClick={() => handleDeleteLink(link._id)}
-                            >
-                              <Trash2 className="mr-2 h-4 w-4" />
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                                <ExternalLink className="mr-2 h-4 w-4" />
+                                Visit
+                              </DropdownMenuItem>
+                              {/* <DropdownMenuItem
+                                  className="cursor-not-allowed"
+                                >
+                                  <Eye className="mr-2 h-4 w-4" />
+                                  View Analytics
+                                </DropdownMenuItem> */}
+                              <DropdownMenuItem
+                                className="cursor-pointer"
+                                onClick={() => handleChangeStatus(link._id)}
+                              >
+                                {
+                                  link.isActive ? <LockKeyhole className="mr-2 h-4 w-4" /> : <LockKeyholeOpen className="mr-2 h-4 w-4" />
+                                }
+                                {
+                                  link.isActive !== undefined &&
+                                  <>
+                                    {link.isActive ? "Disable" : "Enable"}
+                                  </>
+                                }
+                              </DropdownMenuItem>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem className="text-red-600 cursor-pointer"
+                                onClick={() => handleDeleteLink(link._id)}
+                              >
+                                <Trash2 className="mr-2 h-4 w-4" />
+                                Delete
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -257,6 +277,11 @@ export default function LinksPage() {
           </CardContent>
         </Card>
       </div>
+      <QrCodeDialog
+        open={qrDialogOpen}
+        onOpenChange={setQrDialogOpen}
+        shortUrl={selectedQrLink ? `${BASE_URL}/${selectedQrLink.shortId}` : ""}
+      />
     </div >
   )
 }

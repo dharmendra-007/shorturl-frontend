@@ -15,6 +15,7 @@ import { useStats } from '@/store/statsStore';
 import { BASE_URL } from '@/constants';
 import { useUrls } from '@/store/urlStore';
 import { toast } from 'sonner';
+import { QrCodePreview } from '../common/qr-code-preview';
 
 export default function ShortLinkCard() {
   const [shortUrl, setShortUrl] = useState('');
@@ -77,7 +78,8 @@ export default function ShortLinkCard() {
         </form>
 
         {shortUrl && (
-          <div className="mt-4 p-3 bg-muted rounded-lg">
+          <div className="mt-4">
+            <div className="p-3 bg-muted rounded-lg">
             <div className="flex items-center justify-between gap-2">
               <span className="text-sm font-medium">{shortUrl.split("://")[1]}</span>
               <div className="flex gap-1">
@@ -89,6 +91,8 @@ export default function ShortLinkCard() {
                 </Button>
               </div>
             </div>
+            </div>
+            <QrCodePreview shortUrl={shortUrl} />
           </div>
         )}
 

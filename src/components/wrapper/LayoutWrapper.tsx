@@ -6,7 +6,7 @@ import Footer from '../common/footer';
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const hideNavbarRoutes = ['/login', '/signup'];
+  const hideNavbarRoutes = ['/login', '/signup', '/verify-email', '/forgot-password', '/reset-password'];
 
   const shouldHideNavbar = hideNavbarRoutes.includes(pathname);
 

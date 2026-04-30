@@ -1,35 +1,31 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import LayoutWrapper from "@/components/wrapper/LayoutWrapper";
 import { AuthProvider } from "@/context/AuthContext";
 import { Toaster} from 'sonner'
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import { cookies } from "next/headers"
+import { AUTH_COOKIE_NAME } from "@/lib/auth"
+import { decodeSessionFromToken } from "@/lib/session"
 
 export const metadata: Metadata = {
   title: "ShortUrl",
   description: "An ultimate url shortner site you will ever need",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies()
+  const token = cookieStore.get(AUTH_COOKIE_NAME)?.value
+  const initialSession = decodeSessionFromToken(token)
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className="font-sans antialiased"
       >
         <ThemeProvider
           attribute="class"
@@ -37,7 +33,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AuthProvider>
+          <AuthProvider initialSession={initialSession}>
             <LayoutWrapper>
               {children}
               <Toaster position="top-center" richColors closeButton/>

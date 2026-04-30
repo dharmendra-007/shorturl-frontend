@@ -31,7 +31,7 @@ function Features() {
             </CardContent>
           </Card>
           <Card className='relative h-full'>
-          <Badge className="absolute rounded-lg top-1 right-1 bg-purple-700 hover:bg-purple-800 dark:text-white/90 gap-1 flex items-center justify-center"><GrAnnounce />coming soon</Badge>
+          {/* <Badge className="absolute rounded-lg top-1 right-1 bg-purple-700 hover:bg-purple-800 dark:text-white/90 gap-1 flex items-center justify-center"><GrAnnounce />coming soon</Badge> */}
             <CardHeader className="pb-3">
               <div className="flex items-center gap-2">
                 <div className="rounded-full bg-primary/20 p-1">

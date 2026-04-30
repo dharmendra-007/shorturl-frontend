@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { ThemeToggle } from "@/components/common/theme-toggle"
+import { GoogleAuthButton } from "@/components/common/google-auth-button"
 import { useAuth } from "@/hooks/useAuth"
 import { signupSchema, SignupSchemaType } from "@/schema/userSchema"
 
@@ -166,6 +167,7 @@ export default function SignupPage() {
                 <Button type="submit" className="w-full h-11 cursor-pointer" disabled={form.formState.isSubmitting || signupLoading}>
                   {(form.formState.isSubmitting || signupLoading) ? <Loader className="animate-spin"/> : "Create account"}
                 </Button>
+                <GoogleAuthButton />
               </form>
             </Form>
           </CardContent>

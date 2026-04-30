@@ -21,7 +21,7 @@ export default function AnalyticsPage() {
 
   useEffect(() => {
     setLoading(true)
-    API.get(`${BASE_URL}/api/v1/url/analytics`, {
+    API.get(`/api/v1/url/analytics`, {
       params: {
         period
       }

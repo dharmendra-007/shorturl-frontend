@@ -76,10 +76,28 @@ npm install
 Create a `.env.local` file in the project root with the following variables:
 
 ```
-NEXT_PUBLIC_BASE_URL = http://localhost:8000
+NEXT_PUBLIC_BASE_URL=http://localhost:8000
+NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=
+NODE_ENV=development
 ```
 
-👉**For BASE URL reference**, check the [Backend Repo](https://github.com/dharmendra-007/short-url-backend)
+Backend environment variables live in the backend repo `.env.example`:
+
+```
+PORT=8000
+NODE_ENV=development
+MONGODB_URI=
+JWT_SECRET=
+FRONTEND_URL=http://localhost:3000
+PUBLIC_SHORT_URL=http://localhost:3000
+SHORT_URL_BASE=http://localhost:3000
+GOOGLE_CLIENT_ID=
+GMAIL_USER=
+GMAIL_APP_PASSWORD=
+```
+
+👉 **For BASE URL reference**, check the [Backend Repo](https://github.com/dharmendra-007/short-url-backend)
 
 4. **Start the Server**
 

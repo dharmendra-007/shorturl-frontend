@@ -3,6 +3,7 @@ export type urlType = {
   shortId: string;
   redirectUrl: string;
   isActive : boolean;
+  qrCodeDataUrl?: string;
   visitHistory: { 
     timestamp: string ,
     ip: string,

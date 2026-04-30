@@ -1,105 +1,121 @@
-'use client';
-import { createContext, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import API from "@/lib/axios";
-import { toast } from "sonner";
+"use client"
 
-interface User {
-  _id: string;
-  name: string;
-  email: string;
-}
+import { createContext, useState } from "react"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
+import type { SessionState } from "@/lib/session"
+import API from "@/lib/axios"
 
 interface AuthContextType {
-  user: User | null;
-  loading: boolean;
-  loginLoading: boolean;
-  signupLoading: boolean;
-  login: (email: string, password: string, rememberMe?: boolean) => void;
-  logout: () => Promise<void>;
-  signup: (name: string, email: string, password: string) => void;
+  user: SessionState["user"]
+  loading: boolean
+  isAuthenticated: boolean
+  isEmailVerified: boolean
+  loginLoading: boolean
+  signupLoading: boolean
+  login: (email: string, password: string, rememberMe?: boolean) => Promise<void>
+  logout: () => Promise<void>
+  signup: (name: string, email: string, password: string) => Promise<void>
+  setSession: (session: SessionState) => void
 }
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [loginLoading, setLoginLoading] = useState(false);
-  const [signupLoading, setSignUpLoading] = useState(false);
-  const router = useRouter();
+export const AuthProvider = ({
+  children,
+  initialSession,
+}: {
+  children: React.ReactNode
+  initialSession: SessionState
+}) => {
+  const [session, setSessionState] = useState<SessionState>(initialSession)
+  const [loading] = useState(false)
+  const [loginLoading, setLoginLoading] = useState(false)
+  const [signupLoading, setSignUpLoading] = useState(false)
+  const router = useRouter()
 
-  // Fetch user on load
-  useEffect(() => {
-    API.get("/api/v1/user/me")
-      .then(res => {
-        if (res.data.success) {
-          setUser(res.data.user);
-        }
-      })
-      .catch(() => setUser(null))
-      .finally(() => setLoading(false));
-  }, []);
+  const setSession = (nextSession: SessionState) => {
+    setSessionState(nextSession)
+  }
 
   const login = async (email: string, password: string, rememberMe = false) => {
     setLoginLoading(true)
-    API.post("/api/v1/user/login", { email, password, rememberMe })
-      .then((res) => {
-        if (res.data.success) {
-          setUser(res.data.user);
-          toast.success(res.data.message)
-          router.push("/");
-        }
-      })
-      .catch((error) => {
-        if (error.response) {
-          toast.error(error.response.data.message)
-        } else {
-          toast.error(String(error))
-        }
-      })
-      .finally(() => setLoginLoading(false))
-  };
+    try {
+      const response = await API.post("/api/v1/user/login", { email, password, rememberMe })
+      if (response.data.success) {
+        const nextUser = response.data.user as SessionState["user"] | undefined
+        setSession({
+          token: null,
+          user: nextUser ?? session.user,
+          isAuthenticated: true,
+          isEmailVerified: Boolean(nextUser?.emailVerified ?? true),
+        })
+        toast.success(response.data.message)
+        router.push("/")
+        router.refresh()
+        return
+      }
+
+      toast.error(response.data.message)
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Network error")
+    } finally {
+      setLoginLoading(false)
+    }
+  }
 
   const signup = async (name: string, email: string, password: string) => {
-    setSignUpLoading(true);
-    API.post("/api/v1/user/", { name, email, password })
-      .then((res) => {
-        if (res.data.success) {
-          toast.success(res.data.message)
-          router.push("/login");
-        }
-      })
-      .catch((error) => {
-        if (error.response) {
-          toast.error(error.response.data.message)
-        } else {
-          toast.error("Network error!")
-        }
-      })
-      .finally(() => setSignUpLoading(false))
-  };
+    setSignUpLoading(true)
+    try {
+      const response = await API.post("/api/v1/user/", { name, email, password })
+      if (response.data.success) {
+        toast.success(response.data.message)
+        router.push("/login")
+        router.refresh()
+        return
+      }
+
+      toast.error(response.data.message)
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Network error")
+    } finally {
+      setSignUpLoading(false)
+    }
+  }
 
   const logout = async () => {
-    return API.post("/api/v1/user/logout", {})
-      .then((res) => {
-        if (res.data.success) {
-          setUser(null)
-          toast.success(res.data.message)
-        }
+    try {
+      const response = await API.post("/api/v1/user/logout", {})
+      setSession({
+        token: null,
+        user: null,
+        isAuthenticated: false,
+        isEmailVerified: false,
       })
-      .catch((error) => {
-        if (error.response) {
-          toast.error(error.response.data.message)
-        } else {
-          toast.error("Network error!")
-        }
-      })
-  };
+      toast.success(response.data.message)
+      router.push("/")
+      router.refresh()
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Network error")
+    }
+  }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, signup  , loginLoading , signupLoading}}>
+    <AuthContext.Provider
+      value={{
+        user: session.user,
+        loading,
+        isAuthenticated: session.isAuthenticated,
+        isEmailVerified: session.isEmailVerified,
+        login,
+        logout,
+        signup,
+        loginLoading,
+        signupLoading,
+        setSession,
+      }}
+    >
       {children}
     </AuthContext.Provider>
-  );
-};
+  )
+}
