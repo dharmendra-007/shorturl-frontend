@@ -1,8 +1,6 @@
 import React from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { CheckCircle, LinkIcon, Zap } from 'lucide-react'
-import { Badge } from '../ui/badge'
-import { GrAnnounce } from "react-icons/gr";
 
 function Features() {
   return (
