@@ -36,7 +36,7 @@ export default function DashboardPage() {
   }, [])
 
   useEffect(() => {
-    API.get('api/v1/url/stats')
+    API.get('/api/v1/url/stats')
       .then((res) => {
         setStats(res.data)
       })

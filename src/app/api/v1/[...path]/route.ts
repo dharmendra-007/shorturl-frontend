@@ -1,12 +1,25 @@
 import { NextRequest, NextResponse } from "next/server"
 
 const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.BACKEND_URL || "http://localhost:8000"
+const HOP_BY_HOP_HEADERS = new Set([
+  "connection",
+  "keep-alive",
+  "proxy-authenticate",
+  "proxy-authorization",
+  "te",
+  "trailer",
+  "transfer-encoding",
+  "upgrade",
+  "content-length",
+  "content-encoding",
+])
 
 async function proxyRequest(request: NextRequest, pathSegments: string[]) {
   const url = new URL(`${BACKEND_BASE_URL}/api/v1/${pathSegments.join("/")}`)
   url.search = request.nextUrl.search
 
   const headers = new Headers(request.headers)
+  headers.set("accept-encoding", "identity")
 
   const body = ["GET", "HEAD"].includes(request.method) ? undefined : await request.arrayBuffer()
 
@@ -23,13 +36,17 @@ async function proxyRequest(request: NextRequest, pathSegments: string[]) {
   })
 
   response.headers.forEach((value, key) => {
-    if (key.toLowerCase() === "set-cookie") {
+    const lowerKey = key.toLowerCase()
+
+    if (lowerKey === "set-cookie") {
       proxied.headers.append(key, value)
       return
     }
-    if (key.toLowerCase() === "content-length") {
+
+    if (HOP_BY_HOP_HEADERS.has(lowerKey)) {
       return
     }
+
     proxied.headers.set(key, value)
   })
 

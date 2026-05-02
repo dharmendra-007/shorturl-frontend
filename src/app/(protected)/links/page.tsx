@@ -35,7 +35,7 @@ export default function LinksPage() {
   const [qrDialogOpen, setQrDialogOpen] = useState(false)
 
   useEffect(() => {
-    API.get('api/v1/url/getuserurl', {
+    API.get('/api/v1/url/getuserurl', {
       params: {
         limit: -1,
         search: searchTerm
@@ -50,7 +50,7 @@ export default function LinksPage() {
   }, [searchTerm])
 
   useEffect(() => {
-    API.get('api/v1/url/stats')
+    API.get('/api/v1/url/stats')
       .then((res) => {
         setStats(res.data)
       })
@@ -60,7 +60,7 @@ export default function LinksPage() {
   }, [])
 
   const handleDeleteLink = async (id: string) => {
-    await API.delete(`api/v1/url/deleteurl/${id}`)
+    await API.delete(`/api/v1/url/deleteurl/${id}`)
       .then(() => {
         deleteUrl(id)
         toast.info(`Link deleted`)
@@ -75,7 +75,7 @@ export default function LinksPage() {
   }
 
   const handleChangeStatus = async (id: string) => {
-    await API.patch(`api/v1/url/changestatus/${id}`)
+    await API.patch(`/api/v1/url/changestatus/${id}`)
       .then(() => {
         const delta = changeStatus(id)
         updateActiveLinks(delta)
